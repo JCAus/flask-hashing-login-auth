@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}{{user.username}}{% endblock %}
+{% block content %}
+
+<nav class="navbar navbar-light bg-primary justify-content-between ">
+    <div class="container">
+      <a href="/" class="navbar-brand text-light">Tweetur</a>
+      <ul class="nav navbar-nav flex-row float-right">
+        {% if session['user_id'] %}
+        <li class="nav-item">
+          <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link pr-3 text-light" href="/login">Login  </a>
+        </li>
+        <li class="nav-item nav-link pr-3 text-light"> &#9898; </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/register">  Sign up</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav> 
+  
+
+<div class="d-flex justify-content-center">
+<div >
+  <div>
+    <h1 class="display-1">{{user.username}}</h1>
+  <form style="display:inline;" action="/users/{{user.id}}/delete" method="POST">
+    <button class="btn btn-sm btn-danger">Delete profile</button>
+  </form>
+  </div>
+  
+  
+  
+  
+</div>
+ 
+  <div>
+    {% for feed in all_feedback %}
+    <div class="card my-4">
+      <div class="card-body">
+        <h3>{{feed.user.username}}</h3>
+        <h5 class="card-title text-info">
+          
+          {{feed.title}}
+          {% if session['user_id'] == feed.user.id %}
+          <form style="display:inline;" action="/feedback/{{feed.id}}/update" method="POST">
+            <button class="btn btn-sm btn-info">Edit</button>
+          </form>
+          <form style="display:inline;" action="/feedback/{{feed.id}}/delete" method="POST">
+            <button class="btn btn-sm btn-danger">&#128465;</button>
+          </form>
+          {% endif %}
+        </h5>
+        
+        <p class="card-text">
+          
+          {{feed.content}}
+        </p>
+  
+      </div>
+    </div>
+    {%endfor%}
+  <div><a href="/users/{{user.id}}/feedback/add" class="btn btn-info">Make a post</a></div>
+
+  </div>
+  
+
+</div>
+
+
+  {% endblock %}
